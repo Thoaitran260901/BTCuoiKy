@@ -1,0 +1,38 @@
+﻿@page "/games"
+@using System.Data
+@inject IGameServices GameServices
+@inject NavigationManager NavigationManager
+<h3>Games</h3>
+<table class=table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Publisher</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var game in GameServices.gameModels)
+        {
+            <tr>
+                <td>@game.Id</td>
+                <td>@game.Name</td>
+                <td>@game.Publisher</td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
+@code {
+    DataTable dataTable = new DataTable();
+    HttpClient client = new HttpClient();
+    GameModel objGame = new GameModel(); 
+    protected override async Task OnInitializedAsync()
+    {   
+        await GameServices.GetGameDetail();
+    }
+    void ShowGame(int id)
+    {
+        NavigationManager.NavigateTo($"gamedetail/{id}");
+    }
+}
